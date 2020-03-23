@@ -12,8 +12,8 @@ console.log('in init');
 
 }
 function draw(){
-	console.log('in draw');
-	pen.clearRect(0,0,W,H);
+	// console.log('in draw');
+	// pen.clearRect(0,0,W,H);
 	pen.fillStyle = "blue";
 	pen.fillRect(rect.x,rect.y,rect.w,rect.h);
 }
