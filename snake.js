@@ -1,7 +1,9 @@
-function init(){
+var mySound;
+function init()
+{
 	canvas = document.getElementById('mycanvas');
-	W= canvas.width=500;//width
-	H=canvas.height=500;//height
+	W= canvas.width=window.innerWidth;//width
+	H=canvas.height=window.innerHeight;//height
 	pen=canvas.getContext('2d');//to draw rect
 	cs=30;//cellsize
 	game_over=false;
@@ -9,14 +11,13 @@ function init(){
 	score=0;
 	lastX=Math.round(W/cs);//last x of canvas
 	lastY=Math.round(H/cs);//last y of canvas
+	
 
 	// images of food
 	food_img=new Image();
 	// food_img.src="Assets/banana.png";
-	img_arr=['Assets/apple.png','Assets/banana.png','Assets/papaya.png'];
-	var k=Math.floor((Math.random() *3));
-	console.log(img_arr[k]);
-	food_img.src=img_arr[k];
+	
+	food_img.src="Assets/banana.png";
 
 
 	trophy = new Image();
@@ -39,16 +40,31 @@ function init(){
 				pen.fillRect(this.cells[i].x*cs,this.cells[i].y*cs,cs-2,cs-2);
 			}
 		},
-		updateSnake:function(){
+		updateSnake:function()
+		{
+			mySound.play();
+			// mySound.loadme();
 			var headx= this.cells[0].x;
 			var heady=this.cells[0].y;
-			
+			for(var i=0;i<this.cells.length;i++){
+				if(headx==this.cells[i].x || heady==this.cells[i].y)
+				{
+						game_over==true;
+				}
+			}
 			if(headx==food.x && heady==food.y){
 				// console.log("over");
 				score+=1;
-				
+				img_arr=['Assets/apple.png','Assets/banana.png','Assets/papaya.png'];
+				var k=Math.floor((Math.random() *3));
+				// console.log(img_arr[k]);
+				food_img.src=img_arr[k];
 				food=getRandomFood(); 
-				
+				for(var i=0;i<this.cells.length;i++){
+					if(food.x==this.cells[i].x || food.y==this.cells[i].y){
+						food=getRandomFood(); 
+					}
+				}
 				//check for food do not generate on snake itself
 			}
 			else{
@@ -76,7 +92,7 @@ function init(){
 			}
 			this.cells.unshift({x:nextX,y:nextY});
 		}
-	};
+	};// end of snake object
 
 	snake.createSnake();
 	function keyPressed(e){
@@ -102,7 +118,7 @@ function init(){
 	document.addEventListener('keydown',keyPressed);
 
 	
-}
+}//end of init
 
 function draw(){
 	pen.clearRect(0,0,W,H);
@@ -122,6 +138,7 @@ function draw(){
 }
 
 function update(){
+	// mySound.loadme();
 	snake.updateSnake();
 	
 }
@@ -130,7 +147,7 @@ function getRandomFood(){
 
 	var foodX=Math.round(Math.random()*(W-cs)/cs);
 	var foodY=Math.round(Math.random()*(H-cs)/cs);
-	if(foodX==lastX || foodX==0 || foodY==lastY || foodY==0 ||foodX==1&&foodY==8){
+	if(foodX==lastX-1|| foodX==0 || foodY==lastY-1|| foodY==0 ||foodX==1&&foodY==8){
 		var foodX=Math.round(Math.random()*(W-cs)/cs);
 		var foodY=Math.round(Math.random()*(H-cs)/cs);
 	}
@@ -141,18 +158,54 @@ function getRandomFood(){
 	}
 	return food;
 }
+function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    // this.sound.setAttribute("loop", "true");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    }
+    this.stop = function(){
+        this.sound.pause();
+    } 
+    this.loadme=function(){
+    	this.sound.load();
+    }  
+    this.ontimeupdate = function() {
+     return this.sound.currentTime;
+	} 
+}
 
 function gameloop(){
 	if(game_over==true){
+		mySound.stop();
 		clearInterval(f);
+
 		alert("Game Over");
 		return;
 	}
 	draw();
+
+	var time=mySound.ontimeupdate();
+	// console.log(time);
+	if(time>=30){
+		mySound.loadme();
+	}
 	update();
 }
+window.onload = function() {
+mySound = new sound("Assets/theme.mp3");
+mySound.play();
+   
+}
+
 init();
-var f=setInterval(gameloop,100);
+var f=setInterval(gameloop,120); 
+
 // if(headx<1){
 // 	snake.direction="right";
 // 	// console.log("left");

@@ -1,8 +1,18 @@
 
-img_arr=['Assets/apple.png','Assets/banana.png','Assets/papaya.png'];
-	var k=Math.floor((Math.random() *3));
-	console.log(img_arr[k]);
-	food_img.src=img_arr[k];
+// img_arr=['Assets/apple.png','Assets/banana.png','Assets/papaya.png'];
+// 	var k=Math.floor((Math.random() *3));
+// 	console.log(img_arr[k]);
+// 	food_img.src=img_arr[k];
+
+
+
+
+// 	for(var i=0;i<this.cells.length;i++){
+// 		if(foodX==this.cells[i].x && foodY==this.cells[i].y){
+// 			var foodX=Math.round(Math.random()*(W-cs)/cs);
+// 			var foodY=Math.round(Math.random()*(H-cs)/cs);
+// 		}
+// 	}
 function init(){
 
 rect={
