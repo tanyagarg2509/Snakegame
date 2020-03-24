@@ -46,12 +46,23 @@ function init()
 			// mySound.loadme();
 			var headx= this.cells[0].x;
 			var heady=this.cells[0].y;
-			for(var i=0;i<this.cells.length;i++){
-				if(headx==this.cells[i].x || heady==this.cells[i].y)
+
+			//for snake biting itselef
+			for(var i=3;i<this.cells.length;i++){
+				
+				if((headx/cs+1==this.cells[i].x && heady/cs==this.cells[i].y ) || 
+				(headx/cs==this.cells[i].x+1 && heady/cs==this.cells[i].y )||
+				 (heady/cs==this.cells[i].y+1 && headx/cs==this.cells[i].x ) ||
+				 (heady/cs +1==this.cells[i].y && headx/cs==this.cells[i].x))
 				{
-						game_over==true;
+					// game_over==true;
+					mySound.stop();
+					clearInterval(f);
+					alert("game over");
 				}
 			}
+
+			//if food eaten by snake
 			if(headx==food.x && heady==food.y){
 				// console.log("over");
 				score+=1;
@@ -60,6 +71,8 @@ function init()
 				// console.log(img_arr[k]);
 				food_img.src=img_arr[k];
 				food=getRandomFood(); 
+
+				//for food items to not generate on snake
 				for(var i=0;i<this.cells.length;i++){
 					if(food.x==this.cells[i].x || food.y==this.cells[i].y){
 						food=getRandomFood(); 
@@ -70,9 +83,7 @@ function init()
 			else{
 				this.cells.pop();
 			}
-			if(this.cells[0].x<0 || this.cells[0].y <0 || this.cells[0].x>lastX-2|| this.cells[0].y>lastY-2 ){
-					game_over=true;
-				}
+			
 			var nextX,nextY;
 			if(this.direction=="right"){
 				nextX=headx+1;
@@ -89,6 +100,10 @@ function init()
 			else if(this.direction=="down"){
 				nextX=headx;
 				nextY=heady+1;
+			}
+			//game over when boundaries touched
+			if(this.cells[0].x<0 || this.cells[0].y <0 || this.cells[0].x>lastX-2|| this.cells[0].y>lastY-2 ){
+					game_over=true;
 			}
 			this.cells.unshift({x:nextX,y:nextY});
 		}
@@ -189,13 +204,14 @@ function gameloop(){
 		return;
 	}
 	draw();
+	update();
 
+	//for reloading audio
 	var time=mySound.ontimeupdate();
 	// console.log(time);
 	if(time>=30){
 		mySound.loadme();
 	}
-	update();
 }
 window.onload = function() {
 mySound = new sound("Assets/theme.mp3");
