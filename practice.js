@@ -1,3 +1,8 @@
+
+img_arr=['Assets/apple.png','Assets/banana.png','Assets/papaya.png'];
+	var k=Math.floor((Math.random() *3));
+	console.log(img_arr[k]);
+	food_img.src=img_arr[k];
 function init(){
 
 rect={
@@ -32,6 +37,7 @@ function gameloop(){
 	if(game_over==true)
 	clearInterval(f);
 }
+
 init();
 var f=setInterval(gameloop,100);
 
