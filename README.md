@@ -1,3 +1,3 @@
 # Snakegame
 
-<iframe src="//www.youtube.com/embed/jglUWD3KMh4?portrait=0&color=333" frameborder="0" allowfullscreen width="400" height="200"></iframe>
+console.log(embed('https://youtu.be/jglUWD3KMh4', {query: {portrait: 0, color: '333'}, attr:{width:400, height:200}}))
