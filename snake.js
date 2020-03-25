@@ -5,7 +5,7 @@ function init()
 	W= canvas.width=window.innerWidth;//width
 	H=canvas.height=window.innerHeight;//height
 	pen=canvas.getContext('2d');//to draw rect
-	cs=30;//cellsize
+	cs=60;//cellsize
 	game_over=false;
 	pen.fillStyle = "blue";//color
 	score=0;
@@ -48,26 +48,31 @@ function init()
 			var heady=this.cells[0].y;
 
 			//for snake biting itselef
-			for(var i=3;i<this.cells.length;i++){
+			// for(var i=3;i<this.cells.length;i++){
 				
-				if((headx/cs+1==this.cells[i].x && heady/cs==this.cells[i].y ) || 
-				(headx/cs==this.cells[i].x+1 && heady/cs==this.cells[i].y )||
-				 (heady/cs==this.cells[i].y+1 && headx/cs==this.cells[i].x ) ||
-				 (heady/cs +1==this.cells[i].y && headx/cs==this.cells[i].x))
-				{
-					// game_over==true;
-					mySound.stop();
-					clearInterval(f);
-					alert("game over");
-				}
-			}
+			// 	if((headx/cs+1==this.cells[i].x && heady/cs==this.cells[i].y ) || 
+			// 	(headx/cs==this.cells[i].x+1 && heady/cs==this.cells[i].y )||
+			// 	 (heady/cs==this.cells[i].y+1 && headx/cs==this.cells[i].x ) ||
+			// 	 (heady/cs +1==this.cells[i].y && headx/cs==this.cells[i].x))
+			// 	{
+			// 		// game_over==true;
+			// 		mySound.stop();
+			// 		clearInterval(f);
+			// 		alert("game over");
+			// 	}
+			// }
 
 			//if food eaten by snake
 			if(headx==food.x && heady==food.y){
 				// console.log("over");
+				var j=Math.floor((Math.random() *4));
+				myFoodSound= new sound(song_arr[j]);
+				myFoodSound.play();
+
 				score+=1;
 				img_arr=['Assets/apple.png','Assets/banana.png','Assets/papaya.png'];
 				var k=Math.floor((Math.random() *3));
+				
 				// console.log(img_arr[k]);
 				food_img.src=img_arr[k];
 				food=getRandomFood(); 
@@ -102,7 +107,7 @@ function init()
 				nextY=heady+1;
 			}
 			//game over when boundaries touched
-			if(this.cells[0].x<0 || this.cells[0].y <0 || this.cells[0].x>lastX-2|| this.cells[0].y>lastY-2 ){
+			if(this.cells[0].x<0 || this.cells[0].y <0 || this.cells[0].x>lastX-1|| this.cells[0].y>lastY-1){
 					game_over=true;
 			}
 			this.cells.unshift({x:nextX,y:nextY});
@@ -198,9 +203,10 @@ function sound(src) {
 function gameloop(){
 	if(game_over==true){
 		mySound.stop();
+		myOutSound.play();
 		clearInterval(f);
-
 		alert("Game Over");
+		myOutSound.stop();
 		return;
 	}
 	draw();
@@ -214,7 +220,9 @@ function gameloop(){
 	}
 }
 window.onload = function() {
+song_arr=["Assets/1.mp3","Assets/2.mp3","Assets/3.mp3","Assets/4.mp3"];
 mySound = new sound("Assets/theme.mp3");
+myOutSound = new sound("Assets/out.mp3");
 mySound.play();
    
 }
